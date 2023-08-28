@@ -40,7 +40,7 @@ public class studentRepository {
         return db.get(regNo);
     }
 
-    public Student updateCourseusingPathVariable(int regNo, String course) {
+    public Student updateCourseUsingPathVariable(int regNo, String course) {
         db.get(regNo).setCourse(course);
         return db.get(regNo);
     }

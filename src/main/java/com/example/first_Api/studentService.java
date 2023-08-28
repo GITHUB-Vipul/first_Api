@@ -44,7 +44,7 @@ public class studentService {
     }
 
     public Student updateCourseUsingPathVariable(int regNo, String course) {
-        return repository.updateCourseusingPathVariable(regNo,course);
+        return repository.updateCourseUsingPathVariable(regNo,course);
 
     }
 

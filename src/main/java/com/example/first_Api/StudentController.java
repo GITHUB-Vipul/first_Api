@@ -1,6 +1,8 @@
 package com.example.first_Api;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;       // after domain name in URL rest everything is API endpoint eg./http//:www.hotstar.com/(endPoint)
 
 import java.util.HashMap;
@@ -14,9 +16,14 @@ public class StudentController {
 studentService service;
 
    @GetMapping("/get")    //this is to map the end point to get the method
-    public Student getStudent(@RequestParam("q")  int regNo)
+    public ResponseEntity getStudent(@RequestParam("q")  int regNo)
    {
-       return service.getStudent(regNo);
+       Student student=service.getStudent(regNo);
+       if(student==null)
+       {
+           return new ResponseEntity("No registered student found", HttpStatus.BAD_REQUEST);
+       }
+       return new ResponseEntity(student,HttpStatus.OK);
    }
 
 
@@ -28,9 +35,14 @@ studentService service;
 
 
     @GetMapping("/getByPath/{regNo}")   // by path variable
-     public Student getStudentUsingPath(@PathVariable("regNo") int regNo)
+     public ResponseEntity getStudentUsingPath(@PathVariable("regNo") int regNo)
     {
-        return service.getStudentUsingPathVariable(regNo);
+       Student student= service.getStudentUsingPathVariable(regNo);
+       if(student==null)
+       {
+           return new ResponseEntity<>("No registered student found",HttpStatus.NOT_FOUND);
+       }
+       return new ResponseEntity<>(student,HttpStatus.FOUND);
     }
 
 
