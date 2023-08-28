@@ -1,5 +1,6 @@
 package com.example.first_Api;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;       // after domain name in URL rest everything is API endpoint eg./http//:www.hotstar.com/(endPoint)
 
 import java.util.HashMap;
@@ -9,58 +10,66 @@ import java.util.Map;
 @RestController
 public class StudentController {
 
-    Map<Integer,Student> db=new HashMap<>();
+@Autowired
+studentService service;
 
    @GetMapping("/get")    //this is to map the end point to get the method
     public Student getStudent(@RequestParam("q")  int regNo)
-    {
-        return db.get(regNo);
-    }
-    @PostMapping ("/add")          // @PostMapping annotated methods handle the HTTP POST requests matched with given URL
+   {
+       return service.getStudent(regNo);
+   }
+
+
+    @PostMapping ("/add")   // @PostMapping annotated methods handle the HTTP POST requests matched with given URL
     public String addStudent(@RequestBody Student student)
     {
-        db.put(student.getRegNo(),student);
-        return "student has been added successfully";
+        return service.addStudent(student);
     }
-    @GetMapping("/getByPath/{regNo}")
+
+
+    @GetMapping("/getByPath/{regNo}")   // by path variable
      public Student getStudentUsingPath(@PathVariable("regNo") int regNo)
     {
-        return db.get(regNo);
+        return service.getStudentUsingPathVariable(regNo);
     }
+
+
     @PutMapping("/updateAge/{regNo}")
      public String updateAge(@PathVariable("regNo") int regNo,@RequestParam("q") int newAge )
     {
-        db.get(regNo).setAge(newAge);
-        return "Age has been updated successfully";
+        return service.updateAge(regNo,newAge);
     }
+
+
     @DeleteMapping("/delete")
     public String deleteStudent(@RequestParam("regNo") int regNo)
     {
-        db.remove(regNo);
-        return regNo +" has been removed successfully";
+        return service.deleteStudent(regNo);
     }
+
+
     @DeleteMapping("/deleteByPath/{regNo}")
     public String deleteStudentUsingPath(@PathVariable("regNo") int regNo)
     {
-        db.remove(regNo);
-        return regNo +" has been removed successfully";
+       return service.deleteStudentUsingPathVariable(regNo);
     }
+
+
     @PutMapping("/update-course-both-rp")  // rp-{Request Param}
     public Student updateCourse(@RequestParam("regNo") int regNo,@RequestParam("course") String course)
     {
-        db.get(regNo).setCourse(course);
-        return db.get(regNo);
+       return service.updateCourse(regNo,course);
     }
+
+
     @PutMapping("/update-course-both pv/{regNo}/{course}")    // pv-{Path Variable}
     public Student updateCourseUsingPath(@PathVariable("regNo") int regNo,@PathVariable("course") String course)
     {
-        db.get(regNo).setCourse(course);
-        return db.get(regNo);
+       return service.updateCourseUsingPathVariable(regNo,course);
     }
     @PutMapping("/update-course-one-rp-one-pv/{regNo}")
     public Student updateCourseUsingOnePROnePV(@PathVariable("regNo") int regNo,@RequestParam("course") String course)
     {
-        db.get(regNo).setCourse(course);
-        return db.get(regNo);
+       return service.updateCourseUsingOnePROnePV(regNo,course);
     }
 }
